@@ -14,7 +14,6 @@ export const api: Middleware<{}, any, Dispatch<any>> =
         baseURL: process.env.REACT_APP_BASE_URL,
         url,
       });
-      if (!list) throw new Error("No data found!");
       if (onSuccess) {
         store.dispatch(apiCallSuccess({ payload: list.data }));
       }

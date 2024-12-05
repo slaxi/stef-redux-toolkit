@@ -1,6 +1,7 @@
 import React from "react";
-import { store } from "../store/configureStore";
 import { handleDeleteImage } from "../store/imagesList";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../store/configureStore";
 
 type TIMageInfo = {
   uploadedBy: string;
@@ -19,9 +20,10 @@ const ImageInfo: React.FC<TIMageInfo> = ({
   description,
   createdAt,
   updatedAt,
-  id
+  id,
 }) => {
-  const handleImageDelete = () => store.dispatch(handleDeleteImage(id))
+  const dispatch = useDispatch<AppDispatch>();
+  const handleImageDelete = () => dispatch(handleDeleteImage(id));
   return (
     <>
       <section className="details_info_section">
@@ -50,9 +52,7 @@ const ImageInfo: React.FC<TIMageInfo> = ({
       </section>
       <section className="details_info_section_description">
         <h2>Description</h2>
-        <p>
-          {description ? description : 'No description found'}
-        </p>
+        <p>{description ? description : "No description found"}</p>
       </section>
       <button onClick={handleImageDelete}>Delete</button>
     </>

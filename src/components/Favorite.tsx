@@ -1,11 +1,11 @@
 import React from "react";
 import { IRoot } from "../model/Images";
 import ImageCard from "./ImageCard";
-import { selectFavoritePics } from "../store/imagesList";
-import { store } from "../store/configureStore";
+import { selectFavoritePics, TInitialState } from "../store/imagesList";
+import { useSelector } from "react-redux";
 
-const Favorite = () => {
-  const favoriteImages = selectFavoritePics(store.getState());
+const Favorite: React.FC = () => {
+  const favoriteImages = useSelector<TInitialState, IRoot[]>(selectFavoritePics)
   return (
     <div className="images">
       {favoriteImages.map(

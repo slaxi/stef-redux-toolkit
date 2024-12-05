@@ -1,20 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import ImageCard from "./ImageCard";
 import ImageInfo from "./ImageInfo";
 import { IRoot } from "../model/Images";
 import { formatDate } from "../utils/formatDate";
 import Fallback from "./Fallback";
-import { store } from "../store/configureStore";
+import { useSelector } from "react-redux";
+import { selectSingleImagePreview, TInitialState } from "../store/imagesList";
 
 const ImageDetails: React.FC = () => {
-  const [image, setImage] = useState<IRoot | null>(null);
-
-  useEffect(
-    () => store.subscribe(() => setImage(store.getState().singleImagePreview)),
-    []
+  const image = useSelector<TInitialState, IRoot | null>(
+    selectSingleImagePreview
   );
 
-  if (!image) return <Fallback />
+  if (!image) return <Fallback />;
 
   const {
     id,
@@ -27,7 +25,7 @@ const ImageDetails: React.FC = () => {
     description,
     createdAt,
     updatedAt,
-    favorited
+    favorited,
   } = image;
 
   return (

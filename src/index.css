@@ -233,7 +233,7 @@ button:hover {
 @media screen and (max-width: 768px) {
   #root {
     flex-direction: column-reverse;
-    /* height: auto; */
+    height: auto;
   }
 
   .sidebar {
@@ -302,6 +302,13 @@ button:hover {
   nav.menu {
     width: 100vw;
     height: 100vh;
+  }
+
+  .menu.open ul {
+    position: absolute;
+    top: 50px;
+    left: 30px;
+    font-size: 1em;
   }
 }
 

@@ -1,8 +1,8 @@
-import { createSlice, Dispatch, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { createSelector } from "reselect";
 import { IRoot } from "../model/Images";
 import { apiCallBegan, apiCallFailure, apiCallSuccess } from "./actions";
-import { error } from "console";
+import { AppDispatch } from "./configureStore";
 
 export type TInitialState = {
   list: IRoot[];
@@ -15,12 +15,12 @@ export type TInitialState = {
 const imagesList = createSlice({
   name: "images",
   initialState: {
-    list: [],
+    list: [] as IRoot[],
     favoriteTabOpen: false,
     singleImagePreview: null,
     isLoading: false,
     error: null
-  },
+  } as TInitialState,
   reducers: {
     addImages: (
       state: TInitialState,
@@ -102,26 +102,26 @@ export const loadImages = () => {
   });
 };
 
-export const setImagePreview = (id: string) => (dispatch: Dispatch) => {
+export const setImagePreview = (id: string) => (dispatch: AppDispatch) => {
   return dispatch(addImagePreviewMark({ id }));
 };
 
-export const handleTabSwitch = (favorite: boolean) => (dispatch: Dispatch) => {
+export const handleTabSwitch = (favorite: boolean) => (dispatch: AppDispatch) => {
  return dispatch(changeFavoriteTab({ favorite }));
 };
 
-export const handleFavoriteSwitch = (id: string) => (dispatch: Dispatch) => {
+export const handleFavoriteSwitch = (id: string) => (dispatch: AppDispatch) => {
   return dispatch(changeFavoriteStatus({ id }));
 };
 
-export const handleDeleteImage = (id: string) => (dispatch: Dispatch) => {
+export const handleDeleteImage = (id: string) => (dispatch: AppDispatch) => {
   return dispatch(deleteImage({ id }));
 };
 
 
 
 export const selectImagesByCreationDate = createSelector(
-  (state: TInitialState) => state.list,
+  (state: IRoot[]) => state,
   (images) => {
     if (!images.length) return [];
     const sortedImages = images
@@ -140,3 +140,14 @@ export const selectFavoritePics = createSelector(
     return images.filter((img) => img.favorited);
   }
 );
+
+export const selectSingleImagePreview = createSelector(
+  (state: TInitialState) => state,
+  (images) => {
+    if(!images) {
+      return null
+    }
+    return images.singleImagePreview
+  }
+)
+

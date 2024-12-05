@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Tabs from "./Tabs";
-import { store } from "../store/configureStore";
 import { IRoot } from "../model/Images";
 import {
   loadImages,
@@ -10,27 +9,27 @@ import {
 import ImageCard from "./ImageCard";
 import Favorite from "./Favorite";
 import Fallback from "./Fallback";
+import { useDispatch, useSelector } from "react-redux";
 
 const Main: React.FC = () => {
-  const [data, setData] = useState<TInitialState | null>(null);
+  const dispatch = useDispatch();
+  const list = useSelector((state: TInitialState) => state.list);
+  const error = useSelector((state: TInitialState) => state.error);
+  const favoriteTabOpen = useSelector((state: TInitialState) => state.favoriteTabOpen);
 
   useEffect(() => {
-    store.dispatch(loadImages());
-    const unsubscribe = store.subscribe(() => setData(store.getState()));
-    return () => {
-      unsubscribe();
-    };
-  }, []);
+    dispatch(loadImages());
+  }, [dispatch]);
 
-  if (!data || !data?.list.length)
-    return <Fallback message={data?.error ?? "No data found!"} />;
+  if (!list || !list?.length)
+    return <Fallback message={error ?? "No list found!"} />;
 
-  const imagesSorted = selectImagesByCreationDate(store.getState());
+  const imagesSorted = selectImagesByCreationDate(list);
 
   return (
     <>
-      <Tabs isFavoriteOpen={data.favoriteTabOpen} />
-      {!data.favoriteTabOpen && imagesSorted.length ? (
+      <Tabs isFavoriteOpen={favoriteTabOpen} />
+      {!favoriteTabOpen && imagesSorted.length ? (
         <div className="images">
           {imagesSorted.map(({ id, filename, url, sizeInBytes }: IRoot) => (
             <ImageCard
@@ -46,7 +45,7 @@ const Main: React.FC = () => {
       ) : (
         ""
       )}
-      {data.favoriteTabOpen && <Favorite />}
+      {favoriteTabOpen && <Favorite />}
     </>
   );
 };
