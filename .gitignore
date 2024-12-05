@@ -17,6 +17,8 @@
 .env.development.local
 .env.test.local
 .env.production.local
+
+# Dotenv environment variables file
 .env
 
 npm-debug.log*
